@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高松市の省エネ設備（エアコン・LED）＆防犯カメラ｜株式会社電気のチカラ</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&family=Urbanist:wght@700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary-color: #00205B;
+            --accent-color: #deff9a;
+            --btn-green: #06C755;
+            --bg-light: #f4f7f9;
+            --text-main: #1a1a1a;
+            --white: #ffffff;
+        }
+
+        body {
+            font-family: 'Noto Sans JP', sans-serif;
+            line-height: 1.6;
+            color: var(--text-main);
+            margin: 0;
+            background-color: var(--white);
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* --- アニメーション --- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* --- ヘッダー --- */
+        header {
+            background-color: var(--white);
+            padding: 10px 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+        }
+        .logo img { max-height: 50px; width: auto; display: block; }
+        .header-btn {
+            background-color: var(--btn-green);
+            color: var(--white);
+            padding: 10px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .header-tel { font-size: 16px; font-weight: 700; color: var(--primary-color); white-space: nowrap; }
+
+        /* --- メインビジュアル --- */
+        .hero {
+            background-color: var(--primary-color);
+            text-align: center;
+            padding-bottom: 40px;
+        }
+        .hero-inner {
+            width: 100%;
+            max-width: 1920px;
+            margin: 0 auto;
+        }
+        .main-visual {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        .hero-cta-area {
+            margin-top: 20px;
+            padding: 0 20px;
+        }
+        .hero-cta-btn {
+            background-color: var(--accent-color);
+            color: var(--primary-color);
+            padding: 20px 60px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 24px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            transition: 0.3s;
+            display: inline-block;
+        }
+        .hero-cta-btn:hover {
+            transform: translateY(-5px);
+            background-color: #fff;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        /* --- 施工事例 --- */
+        section { padding: 80px 0; }
+        .section-title { font-size: 32px; text-align: center; margin-bottom: 50px; font-weight: 700; }
+        .section-title span { color: var(--primary-color); border-bottom: 4px solid var(--accent-color); padding-bottom: 5px; }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        .work-card {
+            background: var(--white);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        }
+        
+        /* 画像が16:9（1920x1080）のまま絶対に切れずに収まる設定 */
+        .work-img { 
+            width: 100%;
+            background-color: #eee;
+            cursor: pointer;
+            overflow: hidden;
+            position: relative;
+        }
+        .work-img img { 
+            width: 100%; 
+            height: auto; 
+            display: block;
+            transition: transform 0.3s ease;
+        }
+        .work-img:hover img {
+            transform: scale(1.02);
+        }
+        
+        /* 画像の上に浮かび上がる「工事名ラベル」 */
+        .work-label {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background-color: var(--primary-color);
+            color: var(--white);
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            border-radius: 6px;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            letter-spacing: 0.5px;
+        }
+        
+        /* 「クリックで拡大」の薄い案内レイヤー */
+        .work-img::after {
+            content: 'クリックで詳細を拡大表示';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.25);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 5;
+        }
+        .work-img:hover::after {
+            opacity: 1;
+        }
+
+        .work-info { padding: 25px 20px; }
+        .work-info h3 { margin: 0 0 12px 0; color: var(--primary-color); font-size: 20px; font-weight: 700; }
+        .work-info p { font-size: 14px; color: #555; line-height: 1.6; text-align: justify; margin: 0; }
+
+        /* --- 会社概要・マップ --- */
+        .company-profile { background-color: var(--bg-light); }
+        .company-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: flex-start; }
+        .table-layout table { width: 100%; border-collapse: collapse; background: #fff; }
+        .table-layout th, .table-layout td { padding: 18px; border-bottom: 1px solid #eee; text-align: left; }
+        .table-layout th { color: var(--primary-color); width: 35%; background: #fafafa; }
+
+        .map-wrapper {
+            width: 100%;
+            height: 400px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        /* --- お問い合わせ --- */
+        .contact-section { background-color: var(--primary-color); color: var(--white); }
+        .contact-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 40px; }
+        .cta-box {
+            background: rgba(255,255,255,0.05);
+            padding: 40px;
+            border-radius: 12px;
+            text-align: center;
+        }
+        .btn-line-cta {
+            background-color: var(--btn-green);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 700;
+            display: block;
+            margin-bottom: 25px;
+            font-size: 18px;
+        }
+        .qr-area { background: white; width: 140px; height: 140px; margin: 0 auto 20px; padding: 10px; border-radius: 10px; }
+        .qr-area img { width: 100%; height: 100%; }
+
+        .iframe-container {
+            width: 100%;
+            height: 1000px;
+            background: white;
+            border-radius: 12px;
+            overflow-y: auto;
+        }
+        .iframe-container iframe { width: 100%; height: 1254px; border: none; }
+
+        footer { padding: 30px 0; text-align: center; font-size: 14px; color: #999; }
+
+        /* --- シネマティック・モーダル（拡大表示） --- */
+        .img-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: zoom-out;
+        }
+        .img-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        .img-modal-content {
+            max-width: 95%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 6px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+        .img-modal.active .img-modal-content {
+            transform: scale(1);
+        }
+        .img-modal-close {
+            position: absolute;
+            top: 20px; right: 30px;
+            color: #fff;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        /* --- スマホ対応 --- */
+        @media (max-width: 768px) {
+            header .container { flex-direction: column; gap: 10px; }
+            .hero-cta-btn { font-size: 18px; width: 100%; padding: 15px 0; }
+            .works-grid, .contact-grid, .company-grid { grid-template-columns: 1fr; }
+            .map-wrapper { height: 300px; }
+            .img-modal-close { top: 10px; right: 20px; font-size: 35px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="logo"><img src="rogo.jpg" alt="株式会社電気のチカラ"></div>
+        <div class="header-btn-area">
+            <a href="#contact" class="header-btn">無料見積もりを依頼する</a>
+        </div>
+        <div class="header-tel">TEL: 050-1792-8689</div>
+    </div>
+</header>
+
+<section class="hero">
+    <div class="hero-inner">
+        <img src="image_6.png" alt="高松市の省エネ設備・電気のチカラ" class="main-visual">
+    </div>
+    <div class="hero-cta-area">
+        <a href="#contact" class="hero-cta-btn">今すぐ無料相談する</a>
+    </div>
+</section>
+
+<div class="container">
+    <section class="reveal">
+        <h2 class="section-title"><span>施工事例</span></h2>
+        <div class="works-grid">
+            
+            <div class="work-card">
+                <div class="work-img" onclick="zoomImage(this)">
+                    <span class="work-label">エアコン交換</span>
+                    <img src="works_1.jpg" alt="エアコン交換の Before/After と省エネ試算データ">
+                </div>
+                <div class="work-info">
+                    <h3>エアコン交換工事</h3>
+                    <p>10年以上使用して冷媒ガス漏れ・部品劣化を起こしていた古いエアコンを、最新の省エネモデルへ取替。冷暖房の効きが劇的に改善しただけでなく、年間の電気代を約18,000円削減する高い省エネ効果を試算エビデンス付きでご紹介しています。</p>
+                </div>
+            </div>
+            
+            <div class="work-card">
+                <div class="work-img" onclick="zoomImage(this)">
+                    <span class="work-label">防犯カメラ・ライト</span>
+                    <img src="works_2.jpg" alt="防犯センサーライト交換・新設による防犯効果実証">
+                </div>
+                <div class="work-info">
+                    <h3>防犯センサーライト設置・交換</h3>
+                    <p>夜間の暗さと防犯面に不安のあったお客様宅にて、既存の旧式ライトから、人感センサー付きの高輝度2灯式LEDライトへの取替工事を実施。夜間の視認性を大幅に高め、不審者の侵入諦め率を劇的に向上させる確実な防犯動線を設計しました。新規の設置も対応可能です。</p>
+                </div>
+            </div>
+            
+            <div class="work-card">
+                <div class="work-img" onclick="zoomImage(this)">
+                    <span class="work-label">LED照明工事</span>
+                    <img src="works_3.jpg" alt="オフィス照明のLED一体型ベースライトへの交換効果">
+                </div>
+                <div class="work-info">
+                    <h3>オフィス・店舗のLED照明工事</h3>
+                    <p>オフィスの古い蛍光灯器具を、高効率・長寿命な最新LED一体型ベースライトへ総入れ替え。部屋全体が隅々までパッと明るくなり、オフィスで働く社員の方々の作業効率が向上。さらに、年間約36,000円の大幅なランニングコストカットと、頻繁な玉切れ交換の手間を解消しました。</p>
+                </div>
+            </div>
+            
+            <div class="work-card">
+                <div class="work-img" onclick="zoomImage(this)">
+                    <span class="work-label">分電盤交換・点検</span>
+                    <img src="works_4.jpg" alt="経年劣化した分電盤の取替交換による漏電リスク低減">
+                </div>
+                <div class="work-info">
+                    <h3>分電盤（ブレーカー）交換工事</h3>
+                    <p>高松市の一般住宅にて、20年近く経過し経年劣化していた“電気の心臓部”である分電盤を最新モデルへ一新。最新の漏電ブレーカーにより、急な家全体の停電や、部品劣化による発火・漏電リスクを未然にシャットアウト。電気の安定性を高め、容量不足によるブレーカー落ちも解決します。</p>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+</div>
+
+<section class="company-profile reveal">
+    <div class="container">
+        <h2 class="section-title"><span>会社概要・アクセス</span></h2>
+        <div class="company-grid">
+            <div class="table-layout">
+                <table>
+                    <tr><th>運営会社</th><td>株式会社電気のチカラ</td></tr>
+                    <tr><th>代表取締役</th><td>藤井 千翔良</td></tr>
+                    <tr><th>所在地</th><td>〒761-1701<br>香川県高松市香川町大野2485-1</td></tr>
+                    <tr><th>保有資格</th><td>第一種電気工事士</td></tr>
+                </table>
+            </div>
+            <div class="map-wrapper">
+                <iframe 
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3297.8016463943345!2d134.03264427575306!3d34.2536067068571!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x35539589d1469e3b%3A0xc696144e13887034!2z44CSNzYxLTE3MDEg6aaZ5bed55yM6auY5p2-5biC6aaZ5bed55S65aSn6YeO77yS77yU77yY77yV4oiS77yR!5e0!3m2!1sja!2sjp!4v1715619566978!5m2!1sja!2sjp" 
+                    width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy">
+                </iframe>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section id="contact" class="contact-section">
+    <div class="container">
+        <div class="contact-grid">
+            <div class="reveal">
+                <h2 style="font-size: 32px; margin-top: 0; margin-bottom: 30px;">お問い合わせ</h2>
+                <div class="cta-box">
+                    <a href="https://lin.ee/xO6YZ0ql" class="btn-line-cta" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line"></i> LINEで見積もり相談</a>
+                    <div class="qr-area"><img src="line.jpg" alt="LINE QR"></div>
+                    <div style="font-size: 28px; font-weight: 700; margin-bottom: 20px;">TEL: 050-1792-8689</div>
+                    <img src="contact_sub.jpg" alt="藤井代表" style="width: 100%; max-width: 280px; border-radius: 10px;">
+                </div>
+            </div>
+            <div class="reveal">
+                <div class="iframe-container">
+                    <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfGCx_nlExBtV64UWzk-ERzBbM48Yqu167ARznO5UNJMmCI3g/viewform?embedded=true" width="100%" height="1254" frameborder="0" marginheight="0" marginwidth="0">読み込んでいます…</iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer><p>© 2026 株式会社電気のチカラ All Rights Reserved.</p></footer>
+
+<div id="zoomModal" class="img-modal" onclick="closeZoom()">
+    <span class="img-modal-close">×</span>
+    <img class="img-modal-content" id="zoomTarget">
+</div>
+
+<script>
+    function reveal() {
+        var reveals = document.querySelectorAll(".reveal");
+        for (var i = 0; i < reveals.length; i++) {
+            var windowHeight = window.innerHeight;
+            var elementTop = reveals[i].getBoundingClientRect().top;
+            if (elementTop < windowHeight - 100) { reveals[i].classList.add("active"); }
+        }
+    }
+    window.addEventListener("scroll", reveal);
+    reveal();
+
+    function zoomImage(element) {
+        var modal = document.getElementById("zoomModal");
+        var zoomTarget = document.getElementById("zoomTarget");
+        var clickedImg = element.querySelector("img");
+        
+        modal.classList.add("active");
+        zoomTarget.src = clickedImg.src;
+    }
+
+    function closeZoom() {
+        var modal = document.getElementById("zoomModal");
+        modal.classList.remove("active");
+    }
+</script>
+
+</body>
+</html>
